@@ -21,15 +21,15 @@ class WeekOverviewPage extends React.Component {
 		Object.assign(
 			{
 				days: {
-					flexDirection: 'row',
-					flexWrap: 'wrap',
+					flexDirection: 'column',
+					flexWrap: 'nowrap',
 					flexGrow: 1,
 					paddingTop: 1,
 					paddingLeft: 1,
 				},
 				day: {
-					width: '33.5%',
-					height: '33.5%',
+					width: '100%',
+					height: '12.5%',
 					border: '1 solid black',
 					flexDirection: 'column',
 					marginTop: -1,
@@ -53,8 +53,8 @@ class WeekOverviewPage extends React.Component {
 					marginLeft: 'auto',
 				},
 				todos: {
-					width: '66.6%',
-					height: '33.5%',
+					width: '100%',
+					height: '12.5%',
 					flexDirection: 'column',
 					padding: 5,
 				},

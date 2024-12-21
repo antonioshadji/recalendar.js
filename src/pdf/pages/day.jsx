@@ -42,9 +42,16 @@ class DayPage extends React.Component {
 		const itemsByPage = splitItemsByPages( items );
 
 		const specialDateKey = this.props.date.format( SPECIAL_DATES_DATE_FORMAT );
-		const specialItems = this.props.config.specialDates.filter(
-			findByDate( specialDateKey ),
-		);
+		const specialItems =  new Array(
+      { date: date.format('MM-DD'), id:`${(Math.random() +1000).toString(36)}`, type: 'holiday', value: 'Be Proactive'},
+      { date: date.format('MM-DD'), id:`${(Math.random() +1000).toString(36)}`, type: 'holiday', value: 'Begin with the end in mind'},
+      { date: date.format('MM-DD'), id:`${(Math.random() +1000).toString(36)}`, type: 'holiday', value: 'First things first'},
+    )
+
+    // this.props.config.specialDates.filter(
+    //  findByDate( specialDateKey ),
+    //  );
+    console.dir(specialItems)
 		return (
 			<>
 				<Page id={ dayPageLink( date, config ) } size={ config.pageSize } dpi={ config.dpi }>
