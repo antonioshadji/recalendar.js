@@ -28,8 +28,8 @@ class WeekOverviewPage extends React.Component {
 					paddingLeft: 1,
 				},
 				day: {
-					width: '100%',
-					height: '12.5%',
+					width: '50%',
+					height: '14.25%',
 					border: '1 solid black',
 					flexDirection: 'column',
 					marginTop: -1,
@@ -53,8 +53,8 @@ class WeekOverviewPage extends React.Component {
 					marginLeft: 'auto',
 				},
 				todos: {
-					width: '100%',
-					height: '12.5%',
+					width: '50%',
+					height: '100',
 					flexDirection: 'column',
 					padding: 5,
 				},
