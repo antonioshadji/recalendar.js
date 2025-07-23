@@ -17,26 +17,32 @@ import { weekOverviewLink, dayPageLink } from '~/pdf/lib/links';
 import { content, pageStyle } from '~/pdf/styles';
 
 class WeekOverviewPage extends React.Component {
+	// Inside your class styles definition
 	styles = StyleSheet.create(
 		Object.assign(
 			{
 				days: {
-					flexDirection: 'column',
-					flexWrap: 'nowrap',
+					flexDirection: 'column', // Still column since we stack rows
 					flexGrow: 1,
 					paddingTop: 1,
 					paddingLeft: 1,
 				},
+				dayRow: {
+					flexDirection: 'row',
+					width: '100%',
+					height: '14.25%',
+				},
 				day: {
 					width: '50%',
-					height: '14.25%',
+					height: '100%',
 					border: '1 solid black',
 					flexDirection: 'column',
 					marginTop: -1,
-					marginLeft: -1,
+					// marginLeft: -1,
 					padding: 5,
 					textDecoration: 'none',
 					color: 'black',
+					marginLeft: 'auto', // Push to the right side
 				},
 				dayDate: {
 					flexDirection: 'row',
@@ -65,71 +71,71 @@ class WeekOverviewPage extends React.Component {
 					fontSize: 10,
 				},
 			},
-			{ content, page: pageStyle( this.props.config ) },
+			{ content, page: pageStyle(this.props.config) },
 		),
 	);
 
 	getNameOfWeek() {
 		const { date } = this.props;
-		const beginningOfWeek = date.startOf( 'week' ).format( 'DD MMMM' );
-		const endOfWeek = date.endOf( 'week' ).format( 'DD MMMM' );
+		const beginningOfWeek = date.startOf('week').format('DD MMMM');
+		const endOfWeek = date.endOf('week').format('DD MMMM');
 		return `${beginningOfWeek} - ${endOfWeek}`;
 	}
 
 	renderDays() {
 		const { date } = this.props;
-		let currentDate = date.startOf( 'week' );
-		const endOfWeek = date.endOf( 'week' );
+		let currentDate = date.startOf('week');
+		const endOfWeek = date.endOf('week');
 		const days = [];
-		while ( currentDate.isBefore( endOfWeek ) ) {
-			days.push( this.renderDay( currentDate ) );
-			currentDate = currentDate.add( 1, 'day' );
+		while (currentDate.isBefore(endOfWeek)) {
+			days.push(this.renderDay(currentDate));
+			currentDate = currentDate.add(1, 'day');
 		}
 
-		days.push( this.renderTodos() );
+		days.push(this.renderTodos());
 
 		return days;
 	}
 
-	renderDay( day ) {
+	renderDay(day) {
 		const { config } = this.props;
-		const specialDateKey = day.format( SPECIAL_DATES_DATE_FORMAT );
-		const specialItems = config.specialDates.filter( findByDate( specialDateKey ) );
+		const specialDateKey = day.format(SPECIAL_DATES_DATE_FORMAT);
+		const specialItems = config.specialDates.filter(findByDate(specialDateKey));
+
 		return (
-			<Link
-				key={ day.unix() }
-				style={ this.styles.day }
-				src={ '#' + dayPageLink( day, config ) }
-			>
-				<View style={ { flexDirection: 'column' } }>
-					<View style={ this.styles.dayDate }>
-						<Text style={ this.styles.dayOfWeek }>{day.format( 'dddd' )}</Text>
-						<Text style={ this.styles.shortDate }>{day.format( 'DD MMM' )}</Text>
+			<View key={`dayrow-${day.unix()}`} style={this.styles.dayRow}>
+				<View style={{ width: '50%' }} /> {/* Empty left half */}
+				<Link style={this.styles.day} src={'#' + dayPageLink(day, config)}>
+					<View style={{ flexDirection: 'column' }}>
+						<View style={this.styles.dayDate}>
+							<Text style={this.styles.dayOfWeek}>{day.format('dddd')}</Text>
+							<Text style={this.styles.shortDate}>{day.format('DD MMM')}</Text>
+						</View>
+						{specialItems.map(({ id, type, value }) => (
+							<Text
+								key={id}
+								style={[
+									this.styles.specialItem,
+									{ fontWeight: type === HOLIDAY_DAY_TYPE ? 'bold' : 'normal' },
+								]}
+							>
+								» {value}
+							</Text>
+						))}
 					</View>
-					{specialItems.map( ( { id, type, value } ) => (
-						<Text
-							key={ id }
-							style={ [
-								this.styles.specialItem,
-								{ fontWeight: type === HOLIDAY_DAY_TYPE ? 'bold' : 'normal' },
-							] }
-						>
-							» {value}
-						</Text>
-					) )}
-				</View>
-			</Link>
+				</Link>
+			</View>
 		);
 	}
 
 	renderTodos() {
 		return (
-			<View key={ 'todos' } style={ this.styles.todos }>
-				{this.props.config.todos.map( ( { id, value } ) => (
-					<Text key={ id } style={ this.styles.todo }>
+			<View key={'todos'} style={this.styles.todos}>
+				{this.props.config.todos.map(({ id, value }) => (
+					<Text key={id} style={this.styles.todo}>
 						{value}
 					</Text>
-				) )}
+				))}
 			</View>
 		);
 	}
@@ -137,26 +143,30 @@ class WeekOverviewPage extends React.Component {
 	render() {
 		const { t, date, config } = this.props;
 		return (
-			<Page id={ weekOverviewLink( date, config ) } size={ config.pageSize } dpi={ config.dpi }>
-				<View style={ this.styles.page }>
+			<Page
+				id={weekOverviewLink(date, config)}
+				size={config.pageSize}
+				dpi={config.dpi}
+			>
+				<View style={this.styles.page}>
 					<Header
-						isLeftHanded={ config.isLeftHanded }
-						title={ t( 'page.week.title' ) }
-						subtitle={ this.getNameOfWeek() }
-						number={ getWeekNumber( date ).toString() }
+						isLeftHanded={config.isLeftHanded}
+						title={t('page.week.title')}
+						subtitle={this.getNameOfWeek()}
+						number={getWeekNumber(date).toString()}
 						previousLink={
-							'#' + weekOverviewLink( date.subtract( 1, 'week' ), config )
+							'#' + weekOverviewLink(date.subtract(1, 'week'), config)
 						}
-						nextLink={ '#' + weekOverviewLink( date.add( 1, 'week' ), config ) }
+						nextLink={'#' + weekOverviewLink(date.add(1, 'week'), config)}
 						calendar={
 							<MiniCalendar
-								date={ date }
-								highlightMode={ HIGHLIGHT_WEEK }
-								config={ config }
+								date={date}
+								highlightMode={HIGHLIGHT_WEEK}
+								config={config}
 							/>
 						}
 					/>
-					<View style={ this.styles.days }>{this.renderDays()}</View>
+					<View style={this.styles.days}>{this.renderDays()}</View>
 				</View>
 			</Page>
 		);
@@ -164,9 +174,9 @@ class WeekOverviewPage extends React.Component {
 }
 
 WeekOverviewPage.propTypes = {
-	config: PropTypes.instanceOf( PdfConfig ).isRequired,
-	date: PropTypes.instanceOf( dayjs ).isRequired,
+	config: PropTypes.instanceOf(PdfConfig).isRequired,
+	date: PropTypes.instanceOf(dayjs).isRequired,
 	t: PropTypes.func.isRequired,
 };
 
-export default withTranslation( 'pdf' )( WeekOverviewPage );
+export default withTranslation('pdf')(WeekOverviewPage);
