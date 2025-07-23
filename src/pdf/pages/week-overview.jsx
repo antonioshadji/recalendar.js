@@ -17,12 +17,11 @@ import { weekOverviewLink, dayPageLink } from '~/pdf/lib/links';
 import { content, pageStyle } from '~/pdf/styles';
 
 class WeekOverviewPage extends React.Component {
-	// Inside your class styles definition
 	styles = StyleSheet.create(
 		Object.assign(
 			{
 				days: {
-					flexDirection: 'column', // Still column since we stack rows
+					flexDirection: 'column',
 					flexGrow: 1,
 					paddingTop: 1,
 					paddingLeft: 1,
@@ -32,17 +31,25 @@ class WeekOverviewPage extends React.Component {
 					width: '100%',
 					height: '14.25%',
 				},
+				todos: {
+					width: '50%',
+					height: '100%',
+					flexDirection: 'column',
+					padding: 5,
+					border: '1 solid black',
+					marginTop: -1,
+					marginLeft: -1,
+				},
 				day: {
 					width: '50%',
 					height: '100%',
 					border: '1 solid black',
 					flexDirection: 'column',
 					marginTop: -1,
-					// marginLeft: -1,
+					marginLeft: -1,
 					padding: 5,
 					textDecoration: 'none',
 					color: 'black',
-					marginLeft: 'auto', // Push to the right side
 				},
 				dayDate: {
 					flexDirection: 'row',
@@ -57,12 +64,6 @@ class WeekOverviewPage extends React.Component {
 					fontSize: 12,
 					textTransform: 'uppercase',
 					marginLeft: 'auto',
-				},
-				todos: {
-					width: '50%',
-					height: '100',
-					flexDirection: 'column',
-					padding: 5,
 				},
 				todo: {
 					fontSize: 10,
@@ -87,24 +88,35 @@ class WeekOverviewPage extends React.Component {
 		let currentDate = date.startOf('week');
 		const endOfWeek = date.endOf('week');
 		const days = [];
-		while (currentDate.isBefore(endOfWeek)) {
-			days.push(this.renderDay(currentDate));
-			currentDate = currentDate.add(1, 'day');
-		}
+		let index = 0;
 
-		days.push(this.renderTodos());
+		while (currentDate.isBefore(endOfWeek)) {
+			days.push(this.renderDay(currentDate, index === 0)); // Show todos only on the first row
+			currentDate = currentDate.add(1, 'day');
+			index++;
+		}
 
 		return days;
 	}
 
-	renderDay(day) {
+	renderDay(day, showTodos = false) {
 		const { config } = this.props;
 		const specialDateKey = day.format(SPECIAL_DATES_DATE_FORMAT);
 		const specialItems = config.specialDates.filter(findByDate(specialDateKey));
 
 		return (
 			<View key={`dayrow-${day.unix()}`} style={this.styles.dayRow}>
-				<View style={{ width: '50%' }} /> {/* Empty left half */}
+				{/* Left half: todos */}
+				<View style={this.styles.todos}>
+					{showTodos &&
+						config.todos.map(({ id, value }) => (
+							<Text key={id} style={this.styles.todo}>
+								{value}
+							</Text>
+						))}
+				</View>
+
+				{/* Right half: day link block */}
 				<Link style={this.styles.day} src={'#' + dayPageLink(day, config)}>
 					<View style={{ flexDirection: 'column' }}>
 						<View style={this.styles.dayDate}>
