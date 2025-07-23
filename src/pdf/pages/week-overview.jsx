@@ -25,14 +25,16 @@ class WeekOverviewPage extends React.Component {
 					width: '100%',
 					flexGrow: 1,
 				},
-				todosContainer: {
-					width: '50%',
-					border: '1 solid black',
-					marginTop: -1,
-					marginLeft: -1,
-					padding: 5,
-					flexDirection: 'column',
-				},
+todosContainer: {
+	width: '50%',
+	border: '1 solid black',
+	marginTop: -1,
+	marginLeft: -1,
+	paddingHorizontal: 5,
+	position: 'relative',
+	flexDirection: 'column',
+	justifyContent: 'flex-start',
+},
 				days: {
 					width: '50%',
 					flexDirection: 'column',
@@ -66,10 +68,16 @@ class WeekOverviewPage extends React.Component {
 					textTransform: 'uppercase',
 					marginLeft: 'auto',
 				},
-				todo: {
-					fontSize: 10,
-					marginBottom: 2,
-				},
+todo: {
+	fontSize: 10,
+	marginBottom: 2,
+	position: 'absolute', // Position on top of notebook lines
+},
+notebookLine: {
+	borderBottom: '0.5 solid #c0c0c0', // light grey horizontal line
+	width: '100%',
+	height: 14, // adjust spacing between lines
+},
 				specialItem: {
 					fontSize: 10,
 				},
@@ -78,6 +86,7 @@ class WeekOverviewPage extends React.Component {
 		),
 	);
 
+
 	getNameOfWeek() {
 		const { date } = this.props;
 		const beginningOfWeek = date.startOf('week').format('DD MMMM');
@@ -85,6 +94,11 @@ class WeekOverviewPage extends React.Component {
 		return `${beginningOfWeek} - ${endOfWeek}`;
 	}
 
+renderNotebookLines(lineCount = 34) {
+	return Array.from({ length: lineCount }).map((_, index) => (
+		<View key={`line-${index}`} style={this.styles.notebookLine} />
+	));
+}
 	renderDays() {
 		const { date } = this.props;
 		let currentDate = date.startOf('week');
@@ -129,17 +143,29 @@ class WeekOverviewPage extends React.Component {
 		);
 	}
 
-	renderTodosBlock() {
-		return (
-			<View style={this.styles.todosContainer}>
-				{this.props.config.todos.map(({ id, value }) => (
-					<Text key={id} style={this.styles.todo}>
-						{value}
-					</Text>
-				))}
-			</View>
-		);
-	}
+renderTodosBlock() {
+	const { todos } = this.props.config;
+
+	return (
+		<View style={this.styles.todosContainer}>
+			{/* Render notebook lines first */}
+			{this.renderNotebookLines(34)}
+
+			{/* Render TODOs using positioned text */}
+			{todos.map((todo, index) => (
+				<Text
+					key={todo.id}
+					style={[
+						this.styles.todo,
+						{ top: index * 14 + 2 }, // Align each TODO with a notebook line
+					]}
+				>
+					{todo.value}
+				</Text>
+			))}
+		</View>
+	);
+}
 	renderTodos() {
 		return (
 			<View key={'todos'} style={this.styles.todos}>
