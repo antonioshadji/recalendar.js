@@ -20,34 +20,35 @@ class WeekOverviewPage extends React.Component {
 	styles = StyleSheet.create(
 		Object.assign(
 			{
-				days: {
-					flexDirection: 'column',
+				daysWrapper: {
+					flexDirection: 'row',
+					width: '100%',
 					flexGrow: 1,
-					paddingTop: 1,
-					paddingLeft: 1,
+				},
+				todosContainer: {
+					width: '50%',
+					border: '1 solid black',
+					marginTop: -1,
+					marginLeft: -1,
+					padding: 5,
+					flexDirection: 'column',
+				},
+				days: {
+					width: '50%',
+					flexDirection: 'column',
 				},
 				dayRow: {
-					flexDirection: 'row',
 					width: '100%',
 					height: '14.25%',
 				},
-				todos: {
-					width: '50%',
-					height: '100%',
-					flexDirection: 'column',
-					padding: 5,
-					border: '1 solid black',
-					marginTop: -1,
-					marginLeft: -1,
-				},
 				day: {
-					width: '50%',
+					width: '100%',
 					height: '100%',
 					border: '1 solid black',
 					flexDirection: 'column',
+					padding: 5,
 					marginTop: -1,
 					marginLeft: -1,
-					padding: 5,
 					textDecoration: 'none',
 					color: 'black',
 				},
@@ -67,6 +68,7 @@ class WeekOverviewPage extends React.Component {
 				},
 				todo: {
 					fontSize: 10,
+					marginBottom: 2,
 				},
 				specialItem: {
 					fontSize: 10,
@@ -88,35 +90,22 @@ class WeekOverviewPage extends React.Component {
 		let currentDate = date.startOf('week');
 		const endOfWeek = date.endOf('week');
 		const days = [];
-		let index = 0;
 
 		while (currentDate.isBefore(endOfWeek)) {
-			days.push(this.renderDay(currentDate, index === 0)); // Show todos only on the first row
+			days.push(this.renderDay(currentDate));
 			currentDate = currentDate.add(1, 'day');
-			index++;
 		}
 
 		return days;
 	}
 
-	renderDay(day, showTodos = false) {
+	renderDay(day) {
 		const { config } = this.props;
 		const specialDateKey = day.format(SPECIAL_DATES_DATE_FORMAT);
 		const specialItems = config.specialDates.filter(findByDate(specialDateKey));
 
 		return (
 			<View key={`dayrow-${day.unix()}`} style={this.styles.dayRow}>
-				{/* Left half: todos */}
-				<View style={this.styles.todos}>
-					{showTodos &&
-						config.todos.map(({ id, value }) => (
-							<Text key={id} style={this.styles.todo}>
-								{value}
-							</Text>
-						))}
-				</View>
-
-				{/* Right half: day link block */}
 				<Link style={this.styles.day} src={'#' + dayPageLink(day, config)}>
 					<View style={{ flexDirection: 'column' }}>
 						<View style={this.styles.dayDate}>
@@ -140,6 +129,17 @@ class WeekOverviewPage extends React.Component {
 		);
 	}
 
+	renderTodosBlock() {
+		return (
+			<View style={this.styles.todosContainer}>
+				{this.props.config.todos.map(({ id, value }) => (
+					<Text key={id} style={this.styles.todo}>
+						{value}
+					</Text>
+				))}
+			</View>
+		);
+	}
 	renderTodos() {
 		return (
 			<View key={'todos'} style={this.styles.todos}>
@@ -178,7 +178,12 @@ class WeekOverviewPage extends React.Component {
 							/>
 						}
 					/>
-					<View style={this.styles.days}>{this.renderDays()}</View>
+
+					{/* Row layout: left = todos, right = days */}
+					<View style={this.styles.daysWrapper}>
+						{this.renderTodosBlock()}
+						<View style={this.styles.days}>{this.renderDays()}</View>
+					</View>
 				</View>
 			</Page>
 		);
