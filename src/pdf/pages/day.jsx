@@ -19,6 +19,10 @@ import {
 } from '~/pdf/lib/links';
 import { content, pageStyle } from '~/pdf/styles';
 import { splitItemsByPages } from '~/pdf/utils';
+// nodejs imports
+import * as crypto from 'crypto';
+
+
 
 class DayPage extends React.Component {
 	styles = StyleSheet.create(
@@ -43,14 +47,14 @@ class DayPage extends React.Component {
 
 		const specialDateKey = this.props.date.format( SPECIAL_DATES_DATE_FORMAT );
 		const specialItems =  new Array(
-      { date: date.format('MM-DD'), id:`${(Math.random() +1000).toString(36)}`, type: 'holiday', value: 'Be Proactive'},
-      { date: date.format('MM-DD'), id:`${(Math.random() +1000).toString(36)}`, type: 'holiday', value: 'Begin with the end in mind'},
-      { date: date.format('MM-DD'), id:`${(Math.random() +1000).toString(36)}`, type: 'holiday', value: 'First things first'},
+      { date: date.format('MM-DD'), id:`${crypto.randomUUID()}`, type: 'holiday', value: 'Be Proactive'},
+      { date: date.format('MM-DD'), id:`${crypto.randomUUID()}`, type: 'holiday', value: 'Begin with the end in mind'},
+      { date: date.format('MM-DD'), id:`${crypto.randomUUID()}`, type: 'holiday', value: 'First things first'},
     )
 
-    // this.props.config.specialDates.filter(
-    //  findByDate( specialDateKey ),
-    //  );
+    this.props.config.specialDates.filter(
+     findByDate( specialDateKey ),
+     );
     console.dir(specialItems)
 		return (
 			<>

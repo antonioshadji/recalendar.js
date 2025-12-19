@@ -4,10 +4,10 @@ import { t } from 'i18next';
 import { REMARKABLE, getPageProperties } from '~/lib/device-utils';
 import { wrapWithId } from '~/lib/id-utils';
 import { ITINERARY_ITEM, ITINERARY_LINES } from '~/lib/itinerary-utils';
-import {
-	HOLIDAY_DAY_TYPE,
-	EVENT_DAY_TYPE,
-} from '~/lib/special-dates-utils';
+// import {
+// 	HOLIDAY_DAY_TYPE,
+// 	EVENT_DAY_TYPE,
+// } from '~/lib/special-dates-utils';
 import { LATO } from '~/pdf/lib/fonts';
 
 const CONFIG_FIELDS = [
@@ -73,7 +73,7 @@ class PdfConfig {
 			},
 			{
 				type: ITINERARY_LINES,
-				value: 2,
+				value: 4,
 			},
 			{
 				type: ITINERARY_ITEM,
@@ -88,6 +88,7 @@ class PdfConfig {
 		this.todos = [
 			t( 'todos.example1', { ns: 'config' } ),
 			t( 'todos.example2', { ns: 'config' } ),
+			t( 'todos.example3', { ns: 'config' } ),
 		];
 
 		let dayOfWeek = this.firstDayOfWeek;
@@ -102,6 +103,10 @@ class PdfConfig {
 		} );
 		this.isWeekRetrospectiveEnabled = true;
 		this.weekRetrospectiveItinerary = [
+      {
+        type: ITINERARY_ITEM,
+        value: "What projects moved forward this week?"
+      },
 			{
 				type: ITINERARY_LINES,
 				value: 50,
@@ -111,38 +116,7 @@ class PdfConfig {
 		const { dpi, pageSize } = getPageProperties( this.device );
 		this.dpi = dpi;
 		this.pageSize = pageSize;
-		this.specialDates = [
-			{
-				date: '01-01',
-				value: t( 'special-dates.example1', { ns: 'config' } ),
-				type: HOLIDAY_DAY_TYPE,
-			},
-			{
-				date: '01-01',
-				value: t( 'special-dates.example2', { ns: 'config' } ),
-				type: HOLIDAY_DAY_TYPE,
-			},
-			{
-				date: '01-03',
-				value: t( 'special-dates.example3', { ns: 'config' } ),
-				type: HOLIDAY_DAY_TYPE,
-			},
-			{
-				date: '01-13',
-				value: t( 'special-dates.example4', { ns: 'config' } ),
-				type: EVENT_DAY_TYPE,
-			},
-			{
-				date: '01-13',
-				value: t( 'special-dates.example5', { ns: 'config' } ),
-				type: HOLIDAY_DAY_TYPE,
-			},
-			{
-				date: '01-14',
-				value: t( 'special-dates.example6', { ns: 'config' } ),
-				type: EVENT_DAY_TYPE,
-			},
-		];
+		this.specialDates = [ ];
 
 		if ( Object.keys( configOverrides ).length !== 0 ) {
 			Object.assign( this, configOverrides );
