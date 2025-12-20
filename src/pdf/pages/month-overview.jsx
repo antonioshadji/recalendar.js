@@ -40,9 +40,18 @@ class MonthOverviewPage extends React.Component {
 					textTransform: 'uppercase',
 					color: 'black',
 					padding: '10 5',
-					fontSize: 35,
+					fontSize: 30,
 					fontWeight: 'bold',
 					marginLeft: 'auto',
+				},
+				todos: {
+					flexGrow: 1,
+					flexDirection: 'column',
+					justifyContent: 'center',
+				},
+				todo: {
+					color: 'black',
+					fontSize: 10,
 				},
 				habitsTable: {
 					flexGrow: 0,
@@ -206,13 +215,25 @@ class MonthOverviewPage extends React.Component {
 
 	render() {
 		const { date, config } = this.props;
-		const { dpi, pageSize } = config;
+		const { dpi, pageSize, todos } = config;
+
 		const itemsByPage = splitItemsByPages( config.monthItinerary );
 		return (
 			<>
 				<Page id={ monthOverviewLink( date, config ) } size={ pageSize } dpi={ dpi }>
 					<View style={ this.styles.page }>
 						<View style={ this.styles.header }>
+              <View style={ this.styles.todos }>
+                {todos.map((todo, index) => (
+                  <Text
+                    key={todo.id}
+                    style={ this.styles.todo }
+                  >
+                   • {todo.value}
+                  </Text>
+                ))}
+
+              </View>
 							<View style={ this.styles.meta }>
 								<Text style={ this.styles.title }>{date.format( 'MMMM' )}</Text>
 							</View>

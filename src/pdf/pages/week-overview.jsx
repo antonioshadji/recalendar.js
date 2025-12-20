@@ -134,7 +134,7 @@ renderNotebookLines(lineCount = 34) {
 									{ fontWeight: type === HOLIDAY_DAY_TYPE ? 'bold' : 'normal' },
 								]}
 							>
-								» {value}
+								• {value}
 							</Text>
 						))}
 					</View>

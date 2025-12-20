@@ -36,6 +36,7 @@ class DayPage extends React.Component {
 
 	render() {
 		const { date, config } = this.props;
+    const { todos } = config;
 		const { items, isEnabled } = config.dayItineraries[ date.weekday() ];
 		if ( ! isEnabled ) {
 			return null;
@@ -43,16 +44,11 @@ class DayPage extends React.Component {
 		const itemsByPage = splitItemsByPages( items );
 
 		const specialDateKey = this.props.date.format( SPECIAL_DATES_DATE_FORMAT );
-		const specialItems =  new Array(
-      { date: date.format('MM-DD'), id:`${self.crypto.randomUUID()}`, type: 'holiday', value: 'Be Proactive'},
-      { date: date.format('MM-DD'), id:`${self.crypto.randomUUID()}`, type: 'holiday', value: 'Begin with the end in mind'},
-      { date: date.format('MM-DD'), id:`${self.crypto.randomUUID()}`, type: 'holiday', value: 'First things first'},
+		const specialItems =  Array.prototype.concat(
+      todos,
+      this.props.config.specialDates.filter(findByDate( specialDateKey )),
     )
 
-    this.props.config.specialDates.filter(
-     findByDate( specialDateKey ),
-     );
-    console.dir(specialItems)
 		return (
 			<>
 				<Page id={ dayPageLink( date, config ) } size={ config.pageSize } dpi={ config.dpi }>

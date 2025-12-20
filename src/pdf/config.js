@@ -51,7 +51,7 @@ export function hydrateFromObject( object ) {
 
 class PdfConfig {
 	constructor( configOverrides = {} ) {
-		this.year = dayjs().year();
+		this.year = dayjs().year() + 1;
 		this.month = 0;
 		this.firstDayOfWeek = dayjs.localeData().firstDayOfWeek();
 		this.weekendDays = [ 0, 6 ];
@@ -61,10 +61,11 @@ class PdfConfig {
 		this.fontFamily = LATO;
 		this.isMonthOverviewEnabled = true;
 		this.habits = [
-			t( 'habits.example1', { ns: 'config' } ),
-			t( 'habits.example2', { ns: 'config' } ),
-			t( 'habits.example3', { ns: 'config' } ),
-			t( 'habits.example4', { ns: 'config' } ),
+			t( 'habits.habit1', { ns: 'config' } ),
+			t( 'habits.habit2', { ns: 'config' } ),
+			t( 'habits.habit3', { ns: 'config' } ),
+			t( 'habits.habit4', { ns: 'config' } ),
+			t( 'habits.habit5', { ns: 'config' } ),
 		];
 		this.monthItinerary = [
 			{
@@ -115,7 +116,7 @@ class PdfConfig {
 		const { dpi, pageSize } = getPageProperties( this.device );
 		this.dpi = dpi;
 		this.pageSize = pageSize;
-		this.specialDates = [ ];
+		this.specialDates = t('special', {returnObjects: true, ns: 'config'});
 
 		if ( Object.keys( configOverrides ).length !== 0 ) {
 			Object.assign( this, configOverrides );
