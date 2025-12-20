@@ -1,37 +1,20 @@
 {
-	"habits": {
-		"example1": "Morning",
-		"example2": "Evening",
-		"example3": "Reading",
-		"example4": "Writing"
-	},
-	"month": {
-		"goal": "Primary focus:",
-		"notes": "Open projects:"
-	},
-	"templates": {
-		"advanced": {
-			"day": {
-				"monday": "Additional page for extra Monday notes"
-			},
-			"retrospective": {
-				"wins": "Wins of the week",
-				"discoveries": "New discoveries",
-				"fails": "What did not go well?"
-			}
-		}
-	},
-	"todos": {
-		"example1": "Be proactive",
-		"example2": "Begin with the end in mind",
-		"example3": "First things first"
-	},
-	"special-dates": {
-		"example1": "Special date 1",
-		"example2": "Special date for reason #2",
-		"example3": "Some other celebration",
-		"example4": "Some other other celebration that is very long",
-		"example5": "Let's add another one",
-		"example6": "Ran out of reasons celebration"
-	}
+    "habits": {
+        "example1": "Morning",
+        "example2": "Evening",
+        "example3": "Reading",
+        "example4": "Writing"
+    },
+    "month": {
+        "goal": "Primary focus:",
+        "notes": "Open projects:"
+    },
+    "todos": {
+        "example1": "Be proactive",
+        "example2": "Begin with the end in mind",
+        "example3": "First things first"
+    },
+    "retrospective": {
+        "question1": "What projects moved forward this week?"
+    }
 }

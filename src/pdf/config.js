@@ -90,7 +90,6 @@ class PdfConfig {
 			t( 'todos.example2', { ns: 'config' } ),
 			t( 'todos.example3', { ns: 'config' } ),
 		];
-
 		let dayOfWeek = this.firstDayOfWeek;
 		this.dayItineraries = [ ...Array( 7 ).keys() ].map( () => {
 			const itinerary = {
@@ -105,7 +104,7 @@ class PdfConfig {
 		this.weekRetrospectiveItinerary = [
       {
         type: ITINERARY_ITEM,
-        value: "What projects moved forward this week?"
+        value: t( 'retrospective.question1', {ns: 'config'}),
       },
 			{
 				type: ITINERARY_LINES,
