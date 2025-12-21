@@ -14,8 +14,8 @@ export default defineConfig( {
 			input: {
 				main: './index.html',
 				create: './create.html',
-        features: resolve(__dirname, 'public/features.html'),
-        faq: resolve(__dirname, 'public/faq.html')
+        features: './features.html',
+        faq: './faq.html'
 			},
 		},
 	},
