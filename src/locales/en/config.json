@@ -1,123 +1,123 @@
 {
-    "habits": {
-        "habit1": "Morning",
-        "habit2": "Evening",
-        "habit3": "Reading",
-        "habit4": "Writing",
-        "habit5": "Strength"
+  "habits": {
+    "habit1": "Morning",
+    "habit2": "Evening",
+    "habit3": "Reading",
+    "habit4": "Writing",
+    "habit5": "Strength"
+  },
+  "month": {
+    "goal": "Primary focus:",
+    "notes": "Open projects:"
+  },
+  "todos": {
+    "example1": "Be proactive",
+    "example2": "Begin with the end in mind",
+    "example3": "First things first"
+  },
+  "retrospective": {
+    "question1": "What projects moved forward this week?"
+  },
+  "special": [
+    {
+      "date": "03-20",
+      "value": "Spring Equinox 10:46am",
+      "type": "event"
     },
-    "month": {
-        "goal": "Primary focus:",
-        "notes": "Open projects:"
+    {
+      "date": "06-21",
+      "value": "Summer Solstice 4:24am",
+      "type": "event"
     },
-    "todos": {
-        "example1": "Be proactive",
-        "example2": "Begin with the end in mind",
-        "example3": "First things first"
+    {
+      "date": "09-22",
+      "value": "Fall Equinox 2:19pm",
+      "type": "event"
     },
-    "retrospective": {
-        "question1": "What projects moved forward this week?"
+    {
+      "date": "12-21",
+      "value": "Winter Solstice 3:50pm",
+      "type": "event"
     },
-    "special": [
-        {
-            "date": "03-20",
-            "value": "Spring Equinox 10:46am",
-            "type": "event"
-        },
-        {
-            "date": "06-21",
-            "value": "Summer Solstice 4:24am",
-            "type": "event"
-        },
-        {
-            "date": "09-22",
-            "value": "Fall Equinox 2:19pm",
-            "type": "event"
-        },
-        {
-            "date": "12-21",
-            "value": "Winter Solstice 3:50pm",
-            "type": "event"
-        },
-        {
-            "date": "01-01",
-            "value": "New Years Day off",
-            "type": "holiday"
-        },
-        {
-            "date": "01-19",
-            "value": "MLK Day off",
-            "type": "holiday"
-        },
-        {
-            "date": "02-13",
-            "value": "Snake Day off",
-            "type": "holiday"
-        },
-        {
-            "date": "02-16",
-            "value": "Presidents Day off",
-            "type": "holiday"
-        },
-        {
-            "date": "05-22",
-            "value": "Snake Day off",
-            "type": "holiday"
-        },
-        {
-            "date": "05-25",
-            "value": "Memorial Day off",
-            "type": "holiday"
-        },
-        {
-            "date": "06-19",
-            "value": "Juneteenth day off",
-            "type": "holiday"
-        },
-        {
-            "date": "07-03",
-            "value": "Independance Day off",
-            "type": "holiday"
-        },
-        {
-            "date": "07-06",
-            "value": "Snake Day off",
-            "type": "holiday"
-        },
-        {
-            "date": "09-07",
-            "value": "Labor Day off",
-            "type": "holiday"
-        },
-        {
-            "date": "10-09",
-            "value": "Snake Day off",
-            "type": "holiday"
-        },
-        {
-            "date": "11-26",
-            "value": "Thanksgiving Day off",
-            "type": "holiday"
-        },
-        {
-            "date": "11-27",
-            "value": "Post-Thanksgiving Day off",
-            "type": "holiday"
-        },
-        {
-            "date": "12-24",
-            "value": "Christmas Eve Day off",
-            "type": "holiday"
-        },
-        {
-            "date": "12-25",
-            "value": "Christmas Day off",
-            "type": "holiday"
-        },
-        {
-            "date": "12-31",
-            "value": "New Years Eve Day off",
-            "type": "holiday"
-        }
-    ]
+    {
+      "date": "01-01",
+      "value": "New Years Day off",
+      "type": "holiday"
+    },
+    {
+      "date": "01-19",
+      "value": "MLK Day off",
+      "type": "holiday"
+    },
+    {
+      "date": "02-13",
+      "value": "Snake Day off",
+      "type": "holiday"
+    },
+    {
+      "date": "02-16",
+      "value": "Presidents Day off",
+      "type": "holiday"
+    },
+    {
+      "date": "05-22",
+      "value": "Snake Day off",
+      "type": "holiday"
+    },
+    {
+      "date": "05-25",
+      "value": "Memorial Day off",
+      "type": "holiday"
+    },
+    {
+      "date": "06-19",
+      "value": "Juneteenth day off",
+      "type": "holiday"
+    },
+    {
+      "date": "07-03",
+      "value": "Independance Day off",
+      "type": "holiday"
+    },
+    {
+      "date": "07-06",
+      "value": "Snake Day off",
+      "type": "holiday"
+    },
+    {
+      "date": "09-07",
+      "value": "Labor Day off",
+      "type": "holiday"
+    },
+    {
+      "date": "10-09",
+      "value": "Snake Day off",
+      "type": "holiday"
+    },
+    {
+      "date": "11-26",
+      "value": "Thanksgiving Day off",
+      "type": "holiday"
+    },
+    {
+      "date": "11-27",
+      "value": "Post-Thanksgiving Day off",
+      "type": "holiday"
+    },
+    {
+      "date": "12-24",
+      "value": "Christmas Eve Day off",
+      "type": "holiday"
+    },
+    {
+      "date": "12-25",
+      "value": "Christmas Day off",
+      "type": "holiday"
+    },
+    {
+      "date": "12-31",
+      "value": "New Years Eve Day off",
+      "type": "holiday"
+    }
+  ]
 }
