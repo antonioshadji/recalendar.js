@@ -9,30 +9,30 @@ import { fileURLToPath } from 'node:url'
 const __dirname = dirname (fileURLToPath (import.meta.url))
 
 export default defineConfig( {
-	build: {
-		rollupOptions: {
-			input: {
-				main: './index.html',
-				create: './create.html',
+  build: {
+    rollupOptions: {
+      input: {
+        main: './index.html',
+        create: './create.html',
         features: './features.html',
         faq: './faq.html'
-			},
-		},
-	},
-	plugins: [
-		i18nextLoader( { paths: [ './src/locales' ], namespaceResolution: 'basename' } ),
-		react(),
-	],
-	resolve: {
-		alias: {
-			'~': resolve( __dirname, 'src' ),
-		},
-	},
-	worker: {
-		format: 'es',
-		plugins: () => [
-			i18nextLoader( { paths: [ './src/locales' ], namespaceResolution: 'basename' } ),
-			react(),
-		],
-	},
+      },
+    },
+  },
+  plugins: [
+    i18nextLoader( { paths: [ './src/locales' ], namespaceResolution: 'basename' } ),
+    react(),
+  ],
+  resolve: {
+    alias: {
+      '~': resolve( __dirname, 'src' ),
+    },
+  },
+  worker: {
+    format: 'es',
+    plugins: () => [
+      i18nextLoader( { paths: [ './src/locales' ], namespaceResolution: 'basename' } ),
+      react(),
+    ],
+  },
 } );
