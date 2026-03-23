@@ -227,7 +227,7 @@ class MonthOverviewPage extends React.Component {
           <View style={this.styles.page}>
             <View style={this.styles.header}>
               <View style={this.styles.todos}>
-                {todos.map((todo, index) => (
+                {todos.map((todo) => (
                   <Text key={todo.id} style={this.styles.todo}>
                     • {todo.value}
                   </Text>

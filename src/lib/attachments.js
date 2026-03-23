@@ -42,7 +42,7 @@ export async function getJsonAttachment(pdfData, attachmentName) {
       const data = decodePDFRawStream(stream).decode();
       return JSON.parse(new TextDecoder("utf-8").decode(data));
     }
-  } catch (exception) {
+  } catch {
     return undefined;
   }
 

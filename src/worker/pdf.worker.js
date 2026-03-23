@@ -1,4 +1,4 @@
-/* eslint-disable no-restricted-globals */
+ 
 import i18n, { changeLanguage } from "i18next";
 import LanguageDetector from "i18next-browser-languagedetector";
 import React from "react";

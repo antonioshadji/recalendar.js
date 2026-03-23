@@ -41,7 +41,7 @@ class SpecialDates extends React.Component {
     this.setState({ [field]: event.target.value });
   };
 
-  onAddClick = (event) => {
+  onAddClick = () => {
     const date = dayjs(this.state.date, "YYYY-MM-DD");
     const key = date.format(DATE_FORMAT);
     const { value, type } = this.state;
@@ -80,7 +80,7 @@ class SpecialDates extends React.Component {
       this.setState({
         status: STATUS_SUCCESS,
       });
-    } catch (error) {
+    } catch {
       this.setState({
         status: STATUS_ERROR,
       });
@@ -119,7 +119,7 @@ class SpecialDates extends React.Component {
           <Stack direction="horizontal" gap={3}>
             <b className="special-date">{date.format("MMMM DD")}</b>
             <ListGroup variant="flush" className="w-100">
-              {items.map(({ id, value, type }, index) => (
+              {items.map(({ id, value, type }) => (
                 <ListGroup.Item key={id} className="ps-0 pe-0">
                   <Stack direction="horizontal" gap={3}>
                     <span>

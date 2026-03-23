@@ -7,7 +7,7 @@ import PdfConfig from "~/pdf/config";
 
 class Loader extends React.Component {
   componentDidMount() {
-    // eslint-disable-next-line react/no-did-mount-set-state
+     
     this.setState({ config: new PdfConfig() });
   }
 

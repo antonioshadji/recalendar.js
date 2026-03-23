@@ -182,7 +182,7 @@ class Configuration extends React.PureComponent {
     this.setState({ weekendDays: newWeekendDays });
   };
 
-  handleDownload = (event) => {
+  handleDownload = () => {
     this.setState({ isGeneratingPdf: true });
     this.generatePdf(false);
   };
@@ -315,7 +315,7 @@ class Configuration extends React.PureComponent {
     }
   };
 
-  handlePdfGeneration = ({ blob, url, loading, error }) => {
+  handlePdfGeneration = ({ loading }) => {
     const { t } = this.props;
     return loading ? t("loading") : t("download-ready");
   };
