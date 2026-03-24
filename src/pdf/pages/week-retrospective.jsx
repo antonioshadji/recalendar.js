@@ -30,11 +30,7 @@ class WeekRetrospectivePage extends React.Component {
     const itemsByPage = splitItemsByPages(config.weekRetrospectiveItinerary);
     return (
       <>
-        <Page
-          id={weekRetrospectiveLink(date)}
-          size={config.pageSize}
-          dpi={config.dpi}
-        >
+        <Page id={weekRetrospectiveLink(date)} size={config.pointSize}>
           <View style={this.styles.page}>
             <Header
               isLeftHanded={config.isLeftHanded}
@@ -61,7 +57,7 @@ class WeekRetrospectivePage extends React.Component {
           </View>
         </Page>
         {itemsByPage.slice(1).map((items, index) => (
-          <Page key={index} size={config.pageSize} dpi={config.dpi}>
+          <Page key={index} size={config.pointSize}>
             <View style={this.styles.page}>
               <Itinerary items={items} />
             </View>

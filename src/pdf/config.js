@@ -125,6 +125,13 @@ class PdfConfig {
     this.ensureUniqueIds();
   }
 
+  get pointSize() {
+    return [
+      (this.pageSize[0] * 72) / this.dpi,
+      (this.pageSize[1] * 72) / this.dpi,
+    ];
+  }
+
   ensureUniqueIds() {
     const fieldsRequiringUniqueIds = [
       "habits",

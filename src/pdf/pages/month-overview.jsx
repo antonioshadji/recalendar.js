@@ -218,12 +218,12 @@ class MonthOverviewPage extends React.Component {
 
   render() {
     const { date, config } = this.props;
-    const { dpi, pageSize, todos } = config;
+    const { todos } = config;
 
     const itemsByPage = splitItemsByPages(config.monthItinerary);
     return (
       <>
-        <Page id={monthOverviewLink(date, config)} size={pageSize} dpi={dpi}>
+        <Page id={monthOverviewLink(date, config)} size={config.pointSize}>
           <View style={this.styles.page}>
             <View style={this.styles.header}>
               <View style={this.styles.todos}>
@@ -249,7 +249,7 @@ class MonthOverviewPage extends React.Component {
           </View>
         </Page>
         {itemsByPage.slice(1).map((items, index) => (
-          <Page key={index} size={pageSize} dpi={dpi}>
+          <Page key={index} size={config.pointSize}>
             <View style={this.styles.page}>
               <Itinerary items={items} />
             </View>
