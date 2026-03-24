@@ -93,7 +93,7 @@ class MiniCalendar extends React.Component {
     },
     weekNumber: {
       color: "#999",
-      border: "none",
+      border: "0",
       borderRight: "1 solid black",
       fontSize: 10,
       justifyContent: "center",
@@ -101,14 +101,14 @@ class MiniCalendar extends React.Component {
     },
     weekRetrospective: {
       color: "#999",
-      border: "none",
+      border: "0",
       borderLeft: "1 solid black",
       paddingTop: 2,
     },
     weekdayName: {
       fontWeight: "bold",
       color: "black",
-      border: "none",
+      border: "0",
       borderBottom: "1 solid black",
       fontSize: 9,
     },

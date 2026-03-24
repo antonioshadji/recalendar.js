@@ -121,7 +121,7 @@ class MonthOverviewPage extends React.Component {
       stylesObject.header.flexDirection = "row-reverse";
 
       stylesObject.meta.borderLeft = "1 solid black";
-      stylesObject.meta.borderRight = "none";
+      stylesObject.meta.borderRight = "0";
 
       delete stylesObject.title.marginLeft;
     }
