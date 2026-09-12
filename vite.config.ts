@@ -23,7 +23,9 @@ export default defineConfig({
 			paths: [ './src/locales' ],
 			namespaceResolution: 'basename',
 		}),
-		react(),
+		react({
+			exclude: [/\/pdf\//, /\/worker\//, /\/node_modules\//],
+		}),
 	],
 	resolve: {
 		alias: {
@@ -37,7 +39,9 @@ export default defineConfig({
 				paths: [ './src/locales' ],
 				namespaceResolution: 'basename',
 			}),
-			react(),
+			react({
+				exclude: [/\/src\//, /\/node_modules\//],
+			}),
 		],
 	},
 });
