@@ -34,7 +34,10 @@ class DayPage extends React.Component {
     const itemsByPage = splitItemsByPages(items);
 
     const specialDateKey = this.props.date.format(SPECIAL_DATES_DATE_FORMAT);
-    const specialItems = this.props.config.specialDates.filter(findByDate(specialDateKey));
+    const specialItems = [
+      ...(config.todos || []),
+      ...this.props.config.specialDates.filter(findByDate(specialDateKey)),
+    ];
     const sunTimes = config.isSunriseSunsetEnabled ? getSunTimes(date, config) : null;
     return (
       <>

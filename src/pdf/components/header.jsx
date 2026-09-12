@@ -116,9 +116,9 @@ class Header extends React.PureComponent {
 
     return (
       <View style={this.styles.specialItems}>
-        {this.props.specialItems.map(({ id, value }) => (
-          <Text key={id} style={this.styles.specialItem}>
-            » {value}
+        {this.props.specialItems.map(({ id, value }, index) => (
+          <Text key={id || `special-item-${index}`} style={this.styles.specialItem}>
+            • {value}
           </Text>
         ))}
       </View>
