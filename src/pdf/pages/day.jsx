@@ -5,6 +5,7 @@ import React from 'react';
 
 import { getPageSizeInPoints } from '~/lib/device-utils';
 import { findByDate, DATE_FORMAT as SPECIAL_DATES_DATE_FORMAT } from '~/lib/special-dates-utils';
+import { getSunTimes } from '~/lib/sun';
 import Header from '~/pdf/components/header';
 import Itinerary from '~/pdf/components/itinerary';
 import MiniCalendar from '~/pdf/components/mini-calendar';
@@ -34,6 +35,7 @@ class DayPage extends React.Component {
 
     const specialDateKey = this.props.date.format(SPECIAL_DATES_DATE_FORMAT);
     const specialItems = this.props.config.specialDates.filter(findByDate(specialDateKey));
+    const sunTimes = config.isSunriseSunsetEnabled ? getSunTimes(date, config) : null;
     return (
       <>
         <Page id={dayPageLink(date, config)} size={getPageSizeInPoints(config)}>
@@ -48,6 +50,7 @@ class DayPage extends React.Component {
               nextLink={'#' + nextDayPageLink(date, config)}
               calendar={<MiniCalendar date={date} config={config} />}
               specialItems={specialItems}
+              sunTimes={sunTimes}
             />
             <View style={this.styles.content}>
               <Itinerary date={date} items={itemsByPage[0]} config={config} />

@@ -1,9 +1,14 @@
 {
   "habits": {
-    "example1": "Exercise",
-    "example2": "Book",
-    "example3": "Hobby",
-    "example4": "Date night"
+    "habit1": "Morning",
+    "habit2": "Evening",
+    "habit3": "Reading",
+    "habit4": "Writing",
+    "habit5": "Strength",
+    "example1": "Morning",
+    "example2": "Evening",
+    "example3": "Reading",
+    "example4": "Writing"
   },
   "templates": {
     "advanced": {
@@ -18,12 +23,16 @@
     }
   },
   "month": {
-    "goal": "Main goal",
-    "notes": "Notes"
+    "goal": "Primary focus:",
+    "notes": "Open projects:"
   },
   "todos": {
-    "example1": "Plan a trip",
-    "example2": "Some other TODO"
+    "example1": "Be proactive",
+    "example2": "Begin with the end in mind",
+    "example3": "First things first"
+  },
+  "retrospective": {
+    "question1": "What projects moved forward this week?"
   },
   "special-dates": {
     "example1": "Special date 1",

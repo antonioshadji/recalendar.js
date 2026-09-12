@@ -24,6 +24,7 @@ import ItineraryAccordionItem from '~/configuration-form/itinerary-accordion-ite
 import LineSettings from '~/configuration-form/line-settings';
 import PasswordSettings from '~/configuration-form/password-settings';
 import SpecialDates from '~/configuration-form/special-dates';
+import SunSettings from '~/configuration-form/sun-settings';
 import ToggleSection from '~/configuration-form/toggle-section';
 import { CUSTOM, getPageProperties, getSidebarOffset } from '~/lib/device-utils';
 import { ITINERARY_NO_PREFIX } from '~/lib/itinerary-prefixes';
@@ -211,6 +212,10 @@ class Configuration extends React.PureComponent {
     this.setState({ [event.target.id]: event.target.checked });
   };
 
+  handleMultipleFieldsChange = (fields) => {
+    this.setState(fields);
+  };
+
   handleWeekendChange = (event) => {
     const dayOfWeek = Number(event.target.dataset.index);
     const newWeekendDays = [...this.state.weekendDays];
@@ -380,6 +385,16 @@ class Configuration extends React.PureComponent {
             items={this.state.specialDates}
             onAdd={this.handleSpecialDateAdd}
             onRemove={this.handleListRemove}
+          />
+          <SunSettings
+            isSunriseSunsetEnabled={this.state.isSunriseSunsetEnabled}
+            latitude={this.state.latitude}
+            longitude={this.state.longitude}
+            timezone={this.state.timezone}
+            timeFormat={this.state.timeFormat}
+            onChange={this.handleFieldChange}
+            onToggle={this.handleToggle}
+            onMultipleFieldsChange={this.handleMultipleFieldsChange}
           />
           <ToggleSection
             id="isYearNotesEnabled"

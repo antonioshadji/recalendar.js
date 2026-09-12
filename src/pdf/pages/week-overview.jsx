@@ -5,7 +5,6 @@ import React from 'react';
 import { withTranslation } from 'react-i18next';
 
 import { getWeekNumber } from '~/lib/date';
-import { getPageSizeInPoints } from '~/lib/device-utils';
 import { findByDate, HOLIDAY_DAY_TYPE, DATE_FORMAT as SPECIAL_DATES_DATE_FORMAT } from '~/lib/special-dates-utils';
 import Header from '~/pdf/components/header';
 import MiniCalendar, { HIGHLIGHT_WEEK } from '~/pdf/components/mini-calendar';
@@ -17,21 +16,37 @@ class WeekOverviewPage extends React.Component {
   styles = StyleSheet.create(
     Object.assign(
       {
-        days: {
+        daysWrapper: {
           flexDirection: 'row',
-          flexWrap: 'wrap',
+          width: '100%',
           flexGrow: 1,
-          paddingTop: 1,
-          paddingLeft: 1,
         },
-        day: {
-          width: '33.5%',
-          height: '33.5%',
+        todosContainer: {
+          width: '50%',
           border: '1 solid black',
-          flexDirection: 'column',
           marginTop: -1,
           marginLeft: -1,
+          paddingHorizontal: 5,
+          position: 'relative',
+          flexDirection: 'column',
+          justifyContent: 'flex-start',
+        },
+        days: {
+          width: '50%',
+          flexDirection: 'column',
+        },
+        dayRow: {
+          width: '100%',
+          height: '14.25%',
+        },
+        day: {
+          width: '100%',
+          height: '100%',
+          border: '1 solid black',
+          flexDirection: 'column',
           padding: 5,
+          marginTop: -1,
+          marginLeft: -1,
           textDecoration: 'none',
           color: 'black',
         },
@@ -49,14 +64,15 @@ class WeekOverviewPage extends React.Component {
           textTransform: 'uppercase',
           marginLeft: 'auto',
         },
-        todos: {
-          width: '66.6%',
-          height: '33.5%',
-          flexDirection: 'column',
-          padding: 5,
-        },
         todo: {
           fontSize: 10,
+          marginBottom: 2,
+          position: 'absolute', // Position on top of notebook lines
+        },
+        notebookLine: {
+          borderBottom: '0.5 solid #c0c0c0', // light grey horizontal line
+          width: '100%',
+          height: 14, // adjust spacing between lines
         },
         specialItem: {
           fontSize: 10,
@@ -73,58 +89,76 @@ class WeekOverviewPage extends React.Component {
     return `${beginningOfWeek} - ${endOfWeek}`;
   }
 
+  renderNotebookLines(lineCount = 34) {
+    return Array.from({ length: lineCount }).map((_, index) => (
+      // biome-ignore lint/suspicious/noArrayIndexKey: static lines, never reordered
+      <View key={`line-${index}`} style={this.styles.notebookLine} />
+    ));
+  }
   renderDays() {
     const { date } = this.props;
     let currentDate = date.startOf('week');
     const endOfWeek = date.endOf('week');
     const days = [];
+
     while (currentDate.isBefore(endOfWeek)) {
       days.push(this.renderDay(currentDate));
       currentDate = currentDate.add(1, 'day');
     }
-
-    days.push(this.renderTodos());
 
     return days;
   }
 
   renderDay(day) {
     const { config } = this.props;
-    const { isEnabled } = config.dayItineraries[day.weekday()];
     const specialDateKey = day.format(SPECIAL_DATES_DATE_FORMAT);
     const specialItems = config.specialDates.filter(findByDate(specialDateKey));
-    const dayContent = (
-      <View style={{ flexDirection: 'column' }}>
-        <View style={this.styles.dayDate}>
-          <Text style={this.styles.dayOfWeek}>{day.format('dddd')}</Text>
-          <Text style={this.styles.shortDate}>{day.format('DD MMM')}</Text>
-        </View>
-        {specialItems.map(({ id, type, value }) => (
+
+    return (
+      <View key={`dayrow-${day.unix()}`} style={this.styles.dayRow}>
+        <Link style={this.styles.day} src={'#' + dayPageLink(day, config)}>
+          <View style={{ flexDirection: 'column' }}>
+            <View style={this.styles.dayDate}>
+              <Text style={this.styles.dayOfWeek}>{day.format('dddd')}</Text>
+              <Text style={this.styles.shortDate}>{day.format('DD MMM')}</Text>
+            </View>
+            {specialItems.map(({ id, type, value }) => (
+              <Text
+                key={id}
+                style={[this.styles.specialItem, { fontWeight: type === HOLIDAY_DAY_TYPE ? 'bold' : 'normal' }]}
+              >
+                • {value}
+              </Text>
+            ))}
+          </View>
+        </Link>
+      </View>
+    );
+  }
+
+  renderTodosBlock() {
+    const { todos } = this.props.config;
+
+    return (
+      <View style={this.styles.todosContainer}>
+        {/* Render notebook lines first */}
+        {this.renderNotebookLines(34)}
+
+        {/* Render TODOs using positioned text */}
+        {todos.map((todo, index) => (
           <Text
-            key={id}
-            style={[this.styles.specialItem, { fontWeight: type === HOLIDAY_DAY_TYPE ? 'bold' : 'normal' }]}
+            key={todo.id}
+            style={[
+              this.styles.todo,
+              { top: index * 14 + 2 }, // Align each TODO with a notebook line
+            ]}
           >
-            » {value}
+            {todo.value}
           </Text>
         ))}
       </View>
     );
-
-    if (!isEnabled) {
-      return (
-        <View key={day.unix()} style={this.styles.day}>
-          {dayContent}
-        </View>
-      );
-    }
-
-    return (
-      <Link key={day.unix()} style={this.styles.day} src={'#' + dayPageLink(day, config)}>
-        {dayContent}
-      </Link>
-    );
   }
-
   renderTodos() {
     return (
       <View key={'todos'} style={this.styles.todos}>
@@ -140,7 +174,7 @@ class WeekOverviewPage extends React.Component {
   render() {
     const { t, date, config } = this.props;
     return (
-      <Page id={weekOverviewLink(date, config)} size={getPageSizeInPoints(config)}>
+      <Page id={weekOverviewLink(date, config)} size={config.pointSize}>
         <View style={this.styles.page}>
           <Header
             isLeftHanded={config.isLeftHanded}
@@ -151,7 +185,12 @@ class WeekOverviewPage extends React.Component {
             nextLink={'#' + weekOverviewLink(date.add(1, 'week'), config)}
             calendar={<MiniCalendar date={date} highlightMode={HIGHLIGHT_WEEK} config={config} />}
           />
-          <View style={this.styles.days}>{this.renderDays()}</View>
+
+          {/* Row layout: left = todos, right = days */}
+          <View style={this.styles.daysWrapper}>
+            {this.renderTodosBlock()}
+            <View style={this.styles.days}>{this.renderDays()}</View>
+          </View>
         </View>
       </Page>
     );

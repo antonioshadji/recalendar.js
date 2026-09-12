@@ -1,7 +1,7 @@
 import dayjs from 'dayjs/esm';
 import { t } from 'i18next';
 
-import { getPageProperties, REMARKABLE } from '~/lib/device-utils';
+import { getPageProperties, getPageSizeInPoints, REMARKABLE } from '~/lib/device-utils';
 import { wrapWithId } from '~/lib/id-utils';
 import { ITINERARY_ITEM, ITINERARY_LINES } from '~/lib/itinerary-utils';
 import {
@@ -12,7 +12,7 @@ import {
   normalizeLineStyle,
 } from '~/lib/line-styles';
 import { SIDEBAR_LEFT } from '~/lib/sidebar-utils';
-import { EVENT_DAY_TYPE, HOLIDAY_DAY_TYPE } from '~/lib/special-dates-utils';
+import { getSeasonEvents } from '~/lib/sun';
 import { LATO } from '~/pdf/lib/fonts';
 
 const CONFIG_FIELDS = [
@@ -28,6 +28,11 @@ const CONFIG_FIELDS = [
   'isLeftHanded',
   'sidebarPosition',
   'sidebarOffset',
+  'isSunriseSunsetEnabled',
+  'latitude',
+  'longitude',
+  'timezone',
+  'timeFormat',
   'isYearNotesEnabled',
   'yearNotesItinerary',
   'isMonthOverviewEnabled',
@@ -62,7 +67,7 @@ export function hydrateFromObject(object) {
 
 class PdfConfig {
   constructor(configOverrides = {}) {
-    this.year = dayjs().year();
+    this.year = 2027;
     this.month = 0;
     this.firstDayOfWeek = dayjs.localeData().firstDayOfWeek();
     this.weekendDays = [0, 6];
@@ -71,6 +76,11 @@ class PdfConfig {
     this.sidebarOffset = 0;
     this.monthCount = 12;
     this.fontFamily = LATO;
+    this.isSunriseSunsetEnabled = true;
+    this.latitude = 0;
+    this.longitude = 0;
+    this.timezone = '';
+    this.timeFormat = '24h';
     this.isYearNotesEnabled = true;
     this.yearNotesItinerary = [
       {
@@ -80,10 +90,11 @@ class PdfConfig {
     ];
     this.isMonthOverviewEnabled = true;
     this.habits = [
-      t('habits.example1', { ns: 'config' }),
-      t('habits.example2', { ns: 'config' }),
-      t('habits.example3', { ns: 'config' }),
-      t('habits.example4', { ns: 'config' }),
+      t('habits.habit1', { ns: 'config' }),
+      t('habits.habit2', { ns: 'config' }),
+      t('habits.habit3', { ns: 'config' }),
+      t('habits.habit4', { ns: 'config' }),
+      t('habits.habit5', { ns: 'config' }),
     ];
     this.monthItinerary = [
       {
@@ -92,7 +103,7 @@ class PdfConfig {
       },
       {
         type: ITINERARY_LINES,
-        value: 2,
+        value: 4,
       },
       {
         type: ITINERARY_ITEM,
@@ -104,7 +115,11 @@ class PdfConfig {
       },
     ];
     this.isWeekOverviewEnabled = true;
-    this.todos = [t('todos.example1', { ns: 'config' }), t('todos.example2', { ns: 'config' })];
+    this.todos = [
+      t('todos.example1', { ns: 'config' }),
+      t('todos.example2', { ns: 'config' }),
+      t('todos.example3', { ns: 'config' }),
+    ];
 
     let dayOfWeek = this.firstDayOfWeek;
     this.dayItineraries = [...Array(7).keys()].map(() => {
@@ -119,6 +134,10 @@ class PdfConfig {
     this.isWeekRetrospectiveEnabled = true;
     this.weekRetrospectiveItinerary = [
       {
+        type: ITINERARY_ITEM,
+        value: t('retrospective.question1', { ns: 'config' }),
+      },
+      {
         type: ITINERARY_LINES,
         value: 50,
       },
@@ -127,38 +146,7 @@ class PdfConfig {
     const { dpi, pageSize } = getPageProperties(this.device);
     this.dpi = dpi;
     this.pageSize = pageSize;
-    this.specialDates = [
-      {
-        date: '01-01',
-        value: t('special-dates.example1', { ns: 'config' }),
-        type: HOLIDAY_DAY_TYPE,
-      },
-      {
-        date: '01-01',
-        value: t('special-dates.example2', { ns: 'config' }),
-        type: HOLIDAY_DAY_TYPE,
-      },
-      {
-        date: '01-03',
-        value: t('special-dates.example3', { ns: 'config' }),
-        type: HOLIDAY_DAY_TYPE,
-      },
-      {
-        date: '01-13',
-        value: t('special-dates.example4', { ns: 'config' }),
-        type: EVENT_DAY_TYPE,
-      },
-      {
-        date: '01-13',
-        value: t('special-dates.example5', { ns: 'config' }),
-        type: HOLIDAY_DAY_TYPE,
-      },
-      {
-        date: '01-14',
-        value: t('special-dates.example6', { ns: 'config' }),
-        type: EVENT_DAY_TYPE,
-      },
-    ];
+    this.specialDates = getSeasonEvents(this.year, this.timezone);
     this.lineStyle = LINED;
     this.lineHeightPixels = DEFAULT_LINE_HEIGHT_PIXELS;
     this.lineSpacingPixels = AUTOMATIC_SPACING;
@@ -166,11 +154,18 @@ class PdfConfig {
 
     if (Object.keys(configOverrides).length !== 0) {
       Object.assign(this, configOverrides);
+      if (!configOverrides.specialDates) {
+        this.specialDates = getSeasonEvents(this.year, this.timezone);
+      }
     }
 
     this.lineStyle = normalizeLineStyle(this.lineStyle);
 
     this.ensureUniqueIds();
+  }
+
+  get pointSize() {
+    return getPageSizeInPoints(this);
   }
 
   ensureUniqueIds() {
