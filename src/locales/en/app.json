@@ -143,6 +143,19 @@
     "day": {
       "title": "Day itineraries"
     },
+    "sun": {
+      "title": "Sunrise & sunset",
+      "description": "Calculate and display automatic sunrise and sunset times in the header of each daily page based on your location.",
+      "latitude": "Latitude",
+      "longitude": "Longitude",
+      "use-location": "Detect my location",
+      "location-detecting": "Detecting location...",
+      "timezone": "Timezone",
+      "time-format": "Time format",
+      "time-format-24h": "24-hour (e.g. 06:42 / 19:15)",
+      "time-format-12h": "12-hour (e.g. 6:42 AM / 7:15 PM)",
+      "location-error": "Unable to retrieve your location. Please enter coordinates manually."
+    },
     "special-dates": {
       "title": "Special dates",
       "description": "Add your birthdays, celebrations, events, etc. here to get reminders about them in weekly overviews and day pages as they approach.",

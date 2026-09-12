@@ -7,7 +7,6 @@ import PdfConfig from "~/pdf/config";
 
 class Loader extends React.Component {
   componentDidMount() {
-     
     this.setState({ config: new PdfConfig() });
   }
 

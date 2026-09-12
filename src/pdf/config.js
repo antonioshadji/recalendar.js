@@ -31,6 +31,11 @@ const CONFIG_FIELDS = [
   "isWeekRetrospectiveEnabled",
   "weekRetrospectiveItinerary",
   "specialDates",
+  "isSunriseSunsetEnabled",
+  "latitude",
+  "longitude",
+  "timezone",
+  "timeFormat",
 ];
 
 export const CONFIG_FILE = "config.json";
@@ -41,10 +46,13 @@ export const CONFIG_CURRENT_VERSION = CONFIG_VERSION_3;
 
 export function hydrateFromObject(object) {
   return CONFIG_FIELDS.reduce(
-    (fields, field) => ({
-      ...fields,
-      [field]: object[field],
-    }),
+    (fields, field) =>
+      object && object[field] !== undefined
+        ? {
+            ...fields,
+            [field]: object[field],
+          }
+        : fields,
     {},
   );
 }
@@ -59,6 +67,11 @@ class PdfConfig {
     this.alwaysOnSidebar = false;
     this.monthCount = 12;
     this.fontFamily = LATO;
+    this.isSunriseSunsetEnabled = true;
+    this.latitude = 0;
+    this.longitude = 0;
+    this.timezone = "";
+    this.timeFormat = "24h";
     this.isMonthOverviewEnabled = true;
     this.habits = [
       t("habits.habit1", { ns: "config" }),
@@ -143,7 +156,7 @@ class PdfConfig {
 
     fieldsRequiringUniqueIds.forEach((field) => {
       const thisField = this[field];
-      this[field] = thisField.map(wrapWithId);
+      this[field] = Array.isArray(thisField) ? thisField.map(wrapWithId) : [];
     });
 
     this.dayItineraries = this.dayItineraries.map((dayItinerary) => {

@@ -26,12 +26,35 @@ class Header extends React.PureComponent {
         paddingRight: 5,
       },
       subtitle: {
-        marginLeft: "auto",
         textTransform: "uppercase",
         textAlign: "right",
         margin: "0 5",
         fontSize: props.subtitleSize,
-        flex: 1,
+      },
+      daySubtitleWrapper: {
+        marginLeft: "auto",
+        alignItems: "flex-end",
+        justifyContent: "center",
+      },
+      sunTimes: {
+        flexDirection: "row",
+        alignItems: "center",
+        justifyContent: "flex-end",
+        margin: "2 5 0 5",
+      },
+      sunTimeItem: {
+        flexDirection: "row",
+        alignItems: "center",
+        marginLeft: 8,
+      },
+      sunTimeArrow: {
+        fontSize: 8,
+        color: "#555",
+        marginRight: 2,
+      },
+      sunTimeText: {
+        fontSize: 8.5,
+        color: "#333",
       },
       title: {
         textTransform: "uppercase",
@@ -73,10 +96,14 @@ class Header extends React.PureComponent {
       stylesObject.meta.borderRight = "0";
 
       delete stylesObject.dateMain.marginLeft;
-      delete stylesObject.subtitle.marginLeft;
+      delete stylesObject.daySubtitleWrapper.marginLeft;
 
       stylesObject.dateInfo.flexDirection = "row-reverse";
+      stylesObject.daySubtitleWrapper.alignItems = "flex-start";
       stylesObject.subtitle.textAlign = "left";
+      stylesObject.sunTimes.justifyContent = "flex-start";
+      stylesObject.sunTimeItem.marginLeft = 0;
+      stylesObject.sunTimeItem.marginRight = 8;
     }
 
     this.styles = StyleSheet.create(stylesObject);
@@ -94,6 +121,50 @@ class Header extends React.PureComponent {
             • {value}
           </Text>
         ))}
+      </View>
+    );
+  }
+
+  renderSunTimes() {
+    const { sunTimes } = this.props;
+    if (!sunTimes) {
+      return null;
+    }
+
+    if (sunTimes.alwaysUp) {
+      return (
+        <View style={this.styles.sunTimes}>
+          <Text style={this.styles.sunTimeText}>Midnight Sun</Text>
+        </View>
+      );
+    }
+
+    if (sunTimes.alwaysDown) {
+      return (
+        <View style={this.styles.sunTimes}>
+          <Text style={this.styles.sunTimeText}>Polar Night</Text>
+        </View>
+      );
+    }
+
+    if (!sunTimes.sunrise && !sunTimes.sunset) {
+      return null;
+    }
+
+    return (
+      <View style={this.styles.sunTimes}>
+        {sunTimes.sunrise && (
+          <View style={this.styles.sunTimeItem}>
+            <Text style={this.styles.sunTimeArrow}>↑</Text>
+            <Text style={this.styles.sunTimeText}>{sunTimes.sunrise}</Text>
+          </View>
+        )}
+        {sunTimes.sunset && (
+          <View style={this.styles.sunTimeItem}>
+            <Text style={this.styles.sunTimeArrow}>↓</Text>
+            <Text style={this.styles.sunTimeText}>{sunTimes.sunset}</Text>
+          </View>
+        )}
       </View>
     );
   }
@@ -127,7 +198,10 @@ class Header extends React.PureComponent {
           </View>
           <View style={this.styles.dateInfo}>
             {this.renderSpecialItems()}
-            <Text style={this.styles.subtitle}>{subtitle}</Text>
+            <View style={this.styles.daySubtitleWrapper}>
+              <Text style={this.styles.subtitle}>{subtitle}</Text>
+              {this.renderSunTimes()}
+            </View>
           </View>
         </View>
         {calendar}
@@ -150,6 +224,12 @@ Header.propTypes = {
   specialItems: PropTypes.array,
   subtitle: PropTypes.string.isRequired,
   subtitleSize: PropTypes.number,
+  sunTimes: PropTypes.shape({
+    sunrise: PropTypes.string,
+    sunset: PropTypes.string,
+    alwaysUp: PropTypes.bool,
+    alwaysDown: PropTypes.bool,
+  }),
   title: PropTypes.string.isRequired,
   titleLink: PropTypes.string,
   titleSize: PropTypes.number,

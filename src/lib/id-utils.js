@@ -1,7 +1,7 @@
 import { nanoid } from "nanoid";
 
 export function wrapWithId(value) {
-  if (Object.hasOwn(value, "id")) {
+  if (value && Object.hasOwn(value, "id")) {
     return value;
   }
   return {

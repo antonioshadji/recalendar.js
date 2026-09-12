@@ -43,6 +43,7 @@ class Configuration extends React.PureComponent {
   state = {
     isGeneratingPdf: false,
     isGeneratingPreview: false,
+    isDetectingLocation: false,
     blobUrl: null,
     lastPreviewTime: 10000,
     lastFullTime: null,
@@ -61,7 +62,37 @@ class Configuration extends React.PureComponent {
 
   componentDidMount() {
     i18n.on("languageChanged", this.handleLanguageChange);
+    if (!this.state.timezone && typeof Intl !== "undefined") {
+      this.setState({
+        timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+      });
+    }
   }
+
+  handleDetectLocation = () => {
+    if (typeof navigator !== "undefined" && "geolocation" in navigator) {
+      this.setState({ isDetectingLocation: true });
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          this.setState({
+            latitude: Number(position.coords.latitude.toFixed(4)),
+            longitude: Number(position.coords.longitude.toFixed(4)),
+            timezone:
+              this.state.timezone ||
+              Intl.DateTimeFormat().resolvedOptions().timeZone,
+            isDetectingLocation: false,
+          });
+        },
+        (error) => {
+          this.setState({ isDetectingLocation: false });
+          alert(
+            this.props.t("configuration.sun.location-error") || error.message,
+          );
+        },
+        { timeout: 10000 },
+      );
+    }
+  };
 
   componentWillUnmount() {
     i18n.off("languageChanged", this.handleLanguageChange);
@@ -99,7 +130,7 @@ class Configuration extends React.PureComponent {
       event.target.type === "number" ||
       event.target.dataset.type === "number"
     ) {
-      value = Number(value);
+      value = event.target.value === "" ? "" : Number(value);
     }
 
     if (targetId === "resolutionX" || targetId === "resolutionY") {
@@ -156,7 +187,16 @@ class Configuration extends React.PureComponent {
   };
 
   handleToggle = (event) => {
-    this.setState({ [event.target.id]: event.target.checked });
+    const isChecked = event.target.checked;
+    this.setState({ [event.target.id]: isChecked });
+    if (
+      event.target.id === "isSunriseSunsetEnabled" &&
+      isChecked &&
+      this.state.latitude === 0 &&
+      this.state.longitude === 0
+    ) {
+      this.handleDetectLocation();
+    }
   };
 
   handleDayItineraryToggle = (event) => {
@@ -665,6 +705,84 @@ class Configuration extends React.PureComponent {
               </Accordion>
             </Accordion.Body>
           </Accordion.Item>
+          <ToggleAccordionItem
+            id="isSunriseSunsetEnabled"
+            title={t("configuration.sun.title")}
+            onToggle={this.handleToggle}
+            toggledOn={this.state.isSunriseSunsetEnabled}
+          >
+            <p className="mb-3 text-muted">
+              {t("configuration.sun.description")}
+            </p>
+            <Row className="g-2 mb-3">
+              <Col xs={12} sm={6}>
+                <Form.Group controlId="latitude">
+                  <Form.Label>{t("configuration.sun.latitude")}</Form.Label>
+                  <Form.Control
+                    type="number"
+                    step="any"
+                    value={this.state.latitude}
+                    onChange={this.handleFieldChange}
+                  />
+                </Form.Group>
+              </Col>
+              <Col xs={12} sm={6}>
+                <Form.Group controlId="longitude">
+                  <Form.Label>{t("configuration.sun.longitude")}</Form.Label>
+                  <Form.Control
+                    type="number"
+                    step="any"
+                    value={this.state.longitude}
+                    onChange={this.handleFieldChange}
+                  />
+                </Form.Group>
+              </Col>
+            </Row>
+            <Button
+              variant="outline-secondary"
+              size="sm"
+              className="mb-3"
+              disabled={this.state.isDetectingLocation}
+              onClick={this.handleDetectLocation}
+            >
+              {this.state.isDetectingLocation
+                ? t("configuration.sun.location-detecting")
+                : t("configuration.sun.use-location")}
+            </Button>
+            <Row className="g-2 mb-2">
+              <Col xs={12} sm={6}>
+                <Form.Group controlId="timezone">
+                  <Form.Label>{t("configuration.sun.timezone")}</Form.Label>
+                  <Form.Control
+                    type="text"
+                    value={this.state.timezone}
+                    placeholder={
+                      typeof Intl !== "undefined"
+                        ? Intl.DateTimeFormat().resolvedOptions().timeZone
+                        : "UTC"
+                    }
+                    onChange={this.handleFieldChange}
+                  />
+                </Form.Group>
+              </Col>
+              <Col xs={12} sm={6}>
+                <Form.Group controlId="timeFormat">
+                  <Form.Label>{t("configuration.sun.time-format")}</Form.Label>
+                  <Form.Select
+                    value={this.state.timeFormat}
+                    onChange={this.handleFieldChange}
+                  >
+                    <option value="24h">
+                      {t("configuration.sun.time-format-24h")}
+                    </option>
+                    <option value="12h">
+                      {t("configuration.sun.time-format-12h")}
+                    </option>
+                  </Form.Select>
+                </Form.Group>
+              </Col>
+            </Row>
+          </ToggleAccordionItem>
           <ToggleAccordionItem
             id="isWeekRetrospectiveEnabled"
             title={t("configuration.week.retrospective.title")}
