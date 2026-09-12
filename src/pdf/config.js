@@ -138,6 +138,10 @@ class PdfConfig {
         value: t('retrospective.question1', { ns: 'config' }),
       },
       {
+        type: ITINERARY_ITEM,
+        value: t('retrospective.question2', { ns: 'config' }),
+      },
+      {
         type: ITINERARY_LINES,
         value: 50,
       },

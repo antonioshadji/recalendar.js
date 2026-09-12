@@ -32,7 +32,8 @@
     "example3": "First things first"
   },
   "retrospective": {
-    "question1": "What projects moved forward this week?"
+    "question1": "What projects moved forward this week?",
+    "question2": "What went well, what went bad, and what did you learn?"
   },
   "special-dates": {
     "example1": "Special date 1",
